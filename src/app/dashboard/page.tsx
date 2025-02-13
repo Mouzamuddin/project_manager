@@ -1,13 +1,10 @@
 
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { Calendar } from "@/components/ui/calendar";
-import { Search } from "lucide-react";
 import Header from "@/components/ui/header";
 import Footer from "@/components/ui/footer";
 import { useTaskStore, useFetchDashboardData } from "@/app/store/taskStore";
@@ -26,10 +23,6 @@ interface CalendarTaskGroup {
   tasks: Task[];
 }
 
-interface TaskStats {
-  completed: number;
-  pending: number;
-}
 
 const DashboardPage = () => {
   const { isDarkMode, toggleDarkMode } = useThemeStore();
@@ -62,9 +55,6 @@ const DashboardPage = () => {
 
   const selectedTasks = getSelectedTasks();
 
-  const handleRefresh = () => {
-    refetch();
-  };
 
   if (isLoading) {
     return (
@@ -107,28 +97,6 @@ const DashboardPage = () => {
         {/* Main Content */}
         <main className="flex-1 p-8 bg-gray-50 dark:bg-gray-900">
           <div className="flex flex-col space-y-8">
-            {/* Search and Filter Section */}
-            {/* <div className="flex items-center space-x-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search tasks..." className="pl-8" />
-              </div>
-              <Select defaultValue="all">
-                <SelectTrigger className="w-48">
-                  <SelectValue placeholder="Filter by status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Tasks</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                </SelectContent>
-              </Select>
-              <button onClick={handleRefresh} className="px-4 py-2 bg-blue-500 text-white rounded">
-                Refresh Data
-              </button>
-            </div> */}
-
-            {/* Statistics Cards */}
             <div className="grid gap-4 md:grid-cols-3">
               {taskStats && (
                 <>

@@ -1,6 +1,5 @@
 import { db } from './index';
 import { users, projects, categories, tasks } from './schema';
-import { eq } from 'drizzle-orm';
 
 async function seed() {
   try {

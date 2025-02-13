@@ -14,7 +14,6 @@ import { toast } from "react-hot-toast";
 import Header from "@/components/ui/header";
 import Footer from "@/components/ui/footer";
 import { useThemeStore } from "@/app/store/themeStore";
-import { Sidebar } from "@/components/ui/Sidebar";
 
 type Task = {
   id: number;
@@ -67,6 +66,7 @@ export default function TasksPage() {
         throw new Error(data.error || "Failed to fetch tasks");
       }
     } catch (error) {
+      console.error("Error fetching tasks:", error);
       toast.error("Failed to fetch tasks");
       setTasks([]);
     }
@@ -88,7 +88,7 @@ export default function TasksPage() {
           throw new Error("Failed to fetch projects");
         }
       } catch (error) {
-        toast.error("Failed to fetch projects");
+        toast.error("Failed to fetch tasks");
         setProjects([]);
       }
     };
@@ -125,6 +125,7 @@ export default function TasksPage() {
         toast.error(data.error || 'Failed to delete task');
       }
     } catch (error) {
+      console.error("Error deleting tasks:", error);
       toast.error('Failed to delete task');
     }
   };
@@ -166,6 +167,7 @@ export default function TasksPage() {
       await fetchTasks();
       resetForm();
     } catch (error) {
+      console.error("Error updating or adding tasks:", error);
       toast.error(`An error occurred while ${currentTask ? 'updating' : 'adding'} the task`);
     }
   };

@@ -44,7 +44,7 @@ export async function GET(req: Request) {
   const projectId = searchParams.get("projectId");
   const categoryId = searchParams.get("categoryId");
 
-  let conditions = [eq(projects.userId, userId)]; 
+  const conditions = [eq(projects.userId, userId)]; 
   if (projectId) conditions.push(eq(tasks.projectId, parseInt(projectId)));
   if (categoryId) conditions.push(eq(tasks.categoryId, parseInt(categoryId)));
 

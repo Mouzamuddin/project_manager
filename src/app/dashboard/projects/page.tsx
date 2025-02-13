@@ -49,6 +49,7 @@ export default function ProjectsPage() {
           toast.error(data.error || 'Failed to fetch projects');
         }
       } catch (error) {
+        console.error("Error fetching projects:", error);
         toast.error('Failed to fetch projects');
       }
     };
@@ -78,6 +79,7 @@ export default function ProjectsPage() {
         toast.error(newProject.error || 'Failed to add project');
       }
     } catch (error) {
+      console.error("Error adding projects:", error);
       toast.error('Failed to add project');
     }
   };
@@ -101,6 +103,7 @@ export default function ProjectsPage() {
         toast.error(updatedProject.error || 'Failed to update project');
       }
     } catch (error) {
+      console.error("Error updating projects:", error);
       toast.error('Failed to update project');
     }
   };
@@ -121,6 +124,7 @@ export default function ProjectsPage() {
         toast.error(data.error || 'Failed to delete project');
       }
     } catch (error) {
+      console.error("Error deleting projects:", error);
       toast.error('Failed to delete project');
     }
   };

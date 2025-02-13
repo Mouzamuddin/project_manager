@@ -8,7 +8,7 @@ export default function Signup() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -50,10 +50,13 @@ export default function Signup() {
         setError(data.error || "Something went wrong. Please try again.");
       }
     } catch (err) {
-      setError("Network error. Please try again.");
-    } finally {
-      setLoading(false);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Network error. Please try again.");
+      }
     }
+    
   };
 
   if (status === "loading") {

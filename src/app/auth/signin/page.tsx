@@ -34,10 +34,6 @@ export default function SignInPage() {
     }
   };
 
-  const handleLogout = async () => {
-    await signOut({ redirect: false });
-    router.push("/"); 
-  };
 
   if (status === 'loading') {
     return (
