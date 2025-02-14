@@ -1,7 +1,7 @@
 import { db } from "@/app/db";
 import { tasks, projects } from "@/app/db/schema";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/authOptions";
 import { eq, and, isNotNull, asc } from "drizzle-orm";
 
 export async function GET() {
