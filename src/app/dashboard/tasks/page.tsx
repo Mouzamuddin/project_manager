@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState ,useCallback} from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -54,23 +54,28 @@ export default function TasksPage() {
     setCompleted(false);
   };
 
-  const fetchTasks = async () => {
-    if (!selectedProjectId) return;
-    
-    try {
-      const res = await fetch(`/api/tasks?projectId=${selectedProjectId}`);
-      const data = await res.json();
-      if (res.ok) {
-        setTasks(data);
-      } else {
-        throw new Error(data.error || "Failed to fetch tasks");
-      }
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
-      toast.error("Failed to fetch tasks");
-      setTasks([]);
+const fetchTasks = useCallback(async () => {
+  if (!selectedProjectId) return;
+
+  try {
+    const res = await fetch(`/api/tasks?projectId=${selectedProjectId}`);
+    const data = await res.json();
+    if (res.ok) {
+      setTasks(data);
+    } else {
+      throw new Error(data.error || "Failed to fetch tasks");
     }
-  };
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    toast.error("Failed to fetch tasks");
+    setTasks([]);
+  }
+}, [selectedProjectId]);  // Ensure fetchTasks is stable and only updates when selectedProjectId changes
+
+useEffect(() => {
+  fetchTasks();
+}, [fetchTasks]); // Now fetchTasks is safely included in the dependency array
+
 
   useEffect(() => {
     if (!session?.user?.id) return;
@@ -95,6 +100,8 @@ export default function TasksPage() {
 
     fetchProjects();
   }, [session]);
+
+  
 
   useEffect(() => {
     fetchTasks();

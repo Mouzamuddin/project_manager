@@ -29,7 +29,8 @@ export async function GET() {
       .groupBy(tasks.dueDate);
 
     return Response.json(calendarTasks);
-  } catch (error) {
+  }catch (error) {
+    console.error("Error fetching calendar tasks:", error);
     return Response.json({ error: "Failed to fetch calendar tasks" }, { status: 500 });
   }
 }

@@ -27,7 +27,7 @@ interface CalendarTaskGroup {
 const DashboardPage = () => {
   const { isDarkMode, toggleDarkMode } = useThemeStore();
   const { taskStats, upcomingTasks, projectProgress, calendarTasks, error } = useTaskStore();
-  const { isLoading, refetch } = useFetchDashboardData();
+  const { isLoading } = useFetchDashboardData();
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 
