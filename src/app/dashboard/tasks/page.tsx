@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState ,useCallback} from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,6 +32,15 @@ type Project = {
   name: string;
 };
 
+const formatDateForInput = (dateString: string) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export default function TasksPage() {
   const { data: session } = useSession();
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -54,28 +63,27 @@ export default function TasksPage() {
     setCompleted(false);
   };
 
-const fetchTasks = useCallback(async () => {
-  if (!selectedProjectId) return;
+  const fetchTasks = useCallback(async () => {
+    if (!selectedProjectId) return;
 
-  try {
-    const res = await fetch(`/api/tasks?projectId=${selectedProjectId}`);
-    const data = await res.json();
-    if (res.ok) {
-      setTasks(data);
-    } else {
-      throw new Error(data.error || "Failed to fetch tasks");
+    try {
+      const res = await fetch(`/api/tasks?projectId=${selectedProjectId}`);
+      const data = await res.json();
+      if (res.ok) {
+        setTasks(data);
+      } else {
+        throw new Error(data.error || "Failed to fetch tasks");
+      }
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+      toast.error("Failed to fetch tasks");
+      setTasks([]);
     }
-  } catch (error) {
-    console.error("Error fetching tasks:", error);
-    toast.error("Failed to fetch tasks");
-    setTasks([]);
-  }
-}, [selectedProjectId]);  // Ensure fetchTasks is stable and only updates when selectedProjectId changes
+  }, [selectedProjectId]);
 
-useEffect(() => {
-  fetchTasks();
-}, [fetchTasks]); // Now fetchTasks is safely included in the dependency array
-
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
 
   useEffect(() => {
     if (!session?.user?.id) return;
@@ -93,6 +101,7 @@ useEffect(() => {
           throw new Error("Failed to fetch projects");
         }
       } catch (error) {
+        console.error("Error fetching tasks:", error);
         toast.error("Failed to fetch tasks");
         setProjects([]);
       }
@@ -101,18 +110,12 @@ useEffect(() => {
     fetchProjects();
   }, [session]);
 
-  
-
-  useEffect(() => {
-    fetchTasks();
-  }, [selectedProjectId]);
-
   const handleEditClick = (task: Task) => {
     setCurrentTask(task);
     setTitle(task.title);
     setDescription(task.description || "");
     setPriority(task.priority);
-    setDueDate(task.dueDate || "");
+    setDueDate(formatDateForInput(task.dueDate || ""));
     setCompleted(task.completed);
   };
 
@@ -151,7 +154,7 @@ useEffect(() => {
         title,
         description,
         priority,
-        dueDate: dueDate || null,
+        dueDate: dueDate ? new Date(dueDate).toISOString() : null,
         completed,
       };
 
@@ -237,7 +240,7 @@ useEffect(() => {
               <Label>Due Date</Label>
               <Input
                 type="date"
-                value={dueDate}
+                value={formatDateForInput(dueDate)}
                 onChange={(e) => setDueDate(e.target.value)}
               />
 
